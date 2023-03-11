@@ -1,6 +1,5 @@
-const data = [
+const products = [
   {
-    id: "1",
     name: "Wireless Headphones",
     description: "Experience high-quality sound with these wireless headphones",
     price: 50,
@@ -33,12 +32,11 @@ const data = [
       count: 100,
     },
     warranty: {
-      type: "Manufacturer",
-      duration: "1 year",
+      from: "Manufacturer",
+      duration: 12,
     },
   },
   {
-    id: "2",
     name: "Leather Jacket",
     description: "Stay stylish and warm with this leather jacket",
     price: 150,
@@ -71,12 +69,11 @@ const data = [
       count: 50,
     },
     warranty: {
-      type: "Seller",
-      duration: "6 months",
+      from: "Seller",
+      duration: 6,
     },
   },
   {
-    id: "3",
     name: "Fitness Tracker",
     description: "Track your fitness goals with this smart fitness tracker",
     price: 80,
@@ -104,12 +101,11 @@ const data = [
       count: 75,
     },
     warranty: {
-      type: "Seller",
-      duration: "1 year",
+      from: "Seller",
+      duration: 12,
     },
   },
   {
-    id: "0003",
     name: "Women's Running Shoes",
     description: "Comfortable running shoes for women",
     price: 59.99,
@@ -142,12 +138,11 @@ const data = [
       count: 100,
     },
     warranty: {
-      type: "Manufacturer",
-      duration: "1 year",
+      from: "Manufacturer",
+      duration: 12,
     },
   },
   {
-    id: "0004",
     name: "Bluetooth Earbuds",
     description: "Wireless earbuds with Bluetooth connectivity",
     price: 39.99,
@@ -175,12 +170,11 @@ const data = [
       count: 75,
     },
     warranty: {
-      type: "Manufacturer",
-      duration: "2 years",
-    },
+      from: "Manufacturer",
+      duration: 24
+    }
   },
   {
-    id: "0005",
     name: "Leather Handbag",
     description: "Stylish handbag made of high-quality leather",
     price: 129.99,
@@ -208,12 +202,11 @@ const data = [
       count: 50,
     },
     warranty: {
-      type: "Seller",
-      duration: "30 days",
+      from: "Seller",
+      duration: 1,
     },
   },
   {
-    id: "B001",
     name: "Rosehip Oil",
     description: "Natural oil for healthy and hydrated skin",
     price: 29.99,
@@ -240,10 +233,12 @@ const data = [
       average: 4.5,
       count: 100,
     },
-    warranty: null,
+    warranty: {
+      from: "Manufacturer",
+      duration: 1,
+    },
   },
   {
-    id: "S001",
     name: "Moleskine Notebook",
     description: "Hardcover notebook with lined pages",
     price: 12.99,
@@ -270,10 +265,12 @@ const data = [
       average: 4.0,
       count: 50,
     },
-    warranty: null,
+    warranty: {
+      from: "Manufacturer",
+      duration: 1,
+    },
   },
   {
-    id: "B002",
     name: "Eyeshadow Palette",
     description: "Palette with 12 different shades of eyeshadow",
     price: 49.99,
@@ -300,6 +297,11 @@ const data = [
       average: 4.8,
       count: 200,
     },
-    warranty: null,
+    warranty: {
+      from: "Manufacturer",
+      duration: 1,
+    },
   },
 ];
+
+module.exports = products;

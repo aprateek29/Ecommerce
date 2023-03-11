@@ -1,28 +1,33 @@
 const express = require("express");
-const products = require("../data/products");
+const mongoose = require("mongoose");
+
+const productsData = require("../data/products");
+const Product = require("../model/product");
 
 const router = express.Router();
+const ObjectId = mongoose.Types.ObjectId;
 
-const errorHandler = (err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ error: "Internal Server Error" });
-};
+router.get("/reset", resetProductData);
 
-// get all the products
-router.get("/", (req, res) => {
+router.get("/", getAllProducts);
+router.route("/:productId").get(getProductById).delete(deleteProductById);
+router.use(errorHandler);
+
+async function getAllProducts(req, res, next) {
   try {
+    const products = await Product.find().select("-__v");
     res.status(200).json(products);
   } catch (err) {
     next(err);
   }
-});
+}
 
-// get product with provided productId
-router.get("/:productId", (req, res, next) => {
+async function getProductById(req, res, next) {
   try {
-    const product = products.find(
-      (product) => product.id === req.params.productId
-    );
+    const product = await Product.findById({
+      _id: req.params.productId,
+    }).select("-__v");
+
     if (!product) {
       res.status(404).json({ error: "Product not found" });
     } else {
@@ -31,30 +36,38 @@ router.get("/:productId", (req, res, next) => {
   } catch (err) {
     next(err);
   }
-});
+}
 
-// delete product with provided productId
-router.delete("/:productId", (req, res, next) => {
+async function deleteProductById(req, res, next) {
   try {
-    const newData = products.filter(
-      (product) => product.id !== req.params.productId
+    const result = await Product.deleteOne(
+      {
+        _id: new ObjectId(req.params.productId),
+      },
+      { acknowledged: true }
     );
-    res.status(200).json(newData);
+    if (result.deletedCount > 0)
+      res.status(200).json({ message: "Deleted Successfully" });
+    res.status(404).json({ message: "Product not found" });
   } catch (err) {
     next(err);
   }
-});
+}
 
-router.use(errorHandler);
+async function resetProductData(req, res, next) {
+  try {
+    await Product.deleteMany({});
+    await Product.insertMany(productsData);
+    res.status(200).json({ message: "All product data has been reset" });
+  } catch (err) {
+    next(err);
+  }
+}
 
-// handle 404 errors
-router.all("*", (req, res) => {
-  res.status(404).json({
-    error: "API endpoint not found",
-    message:
-      "The requested API endpoint could not be found on this server. Please check that you have entered the correct URL.",
-    status: 404,
-  });
-});
+function errorHandler(err, req, res, next) {
+  console.error(err.stack);
+  console.error(err.reason);
+  res.status(500).json({ error: "Internal Server Error" });
+}
 
 module.exports = router;
