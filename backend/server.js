@@ -1,11 +1,13 @@
 const express = require('express');
 const userRouter = require('./routes/user');
+const productRouter = require('./routes/product');
 
 const app = express();
 const port = 5000;
 
 app.use(express.json());
-app.use('/api/user', userRouter);
+app.use('/api/users', userRouter);
+app.use('/api/products', productRouter);
 
 app.get('/', (req, res, next) => {
     res.status(200).send("Home Page");
