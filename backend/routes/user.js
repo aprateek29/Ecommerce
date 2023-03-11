@@ -8,6 +8,7 @@ const errorHandler = (err, req, res, next) => {
     res.status(500).json({ error: 'Internal Server Error' });
 }
 
+// get all the users
 router.get('/', (req, res) => {
     try {
         res.status(200).json(users);
@@ -16,6 +17,7 @@ router.get('/', (req, res) => {
     }
 })
 
+// get user with provided userId
 router.get('/:userId', (req, res, next) => {
     try {
         const user = users.find(user => user.id === req.params.userId);
@@ -29,6 +31,7 @@ router.get('/:userId', (req, res, next) => {
     }
 });
 
+// delete user with provided userId
 router.delete('/:userId', (req, res, next) => {
     try {
         const newData = users.filter(user => user.id !== req.params.userId);
@@ -40,6 +43,7 @@ router.delete('/:userId', (req, res, next) => {
 
 router.use(errorHandler);
 
+// handle 404 errors
 router.all("*", (req, res) => {
     res.status(404).json({
         "error": "API endpoint not found",
