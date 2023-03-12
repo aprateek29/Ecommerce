@@ -1,7 +1,9 @@
 const express = require('express');
+require('./db');
+
 const userRouter = require('./routes/user');
 const productRouter = require('./routes/product');
-require('./db');
+const { errorHandler } = require('./util/functions');
 
 const app = express();
 const port = 5000;
@@ -9,11 +11,12 @@ const port = 5000;
 app.use(express.json());
 app.use('/api/users', userRouter);
 app.use('/api/products', productRouter);
+app.use(errorHandler);
 
-app.get('/', (req, res, next) => {
-    res.status(200).send("Home Page");
-})
+app.all('/api/*', (req, res, next) => {
+  res.status(404).json({error: "API endpoint not available."});
+});
 
 app.listen(port, () => {
-    console.log(`listening on port ${port}`)
-})
+  console.log(`listening on port ${port}`);
+});

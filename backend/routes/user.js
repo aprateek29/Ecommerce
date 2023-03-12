@@ -1,56 +1,31 @@
 const express = require('express');
-const users = require('../data/users');
+
+const userData = require('../data/users');
+const User = require('../model/user');
+const { handleCRUDOperations, resetModelData } = require('../util/functions');
 
 const router = express.Router();
 
-const errorHandler = (err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).json({ error: 'Internal Server Error' });
-}
+router.get('/reset', (req, res, next) =>
+  resetModelData(req, res, next, User, userData)
+);
 
-// get all the users
-router.get('/', (req, res) => {
-    try {
-        res.status(200).json(users);
-    } catch (err) {
-        next(err);
-    }
-})
+router.get('/', (req, res, next) => handleCRUDOperations(req, res, next, User));
 
-// get user with provided userId
-router.get('/:userId', (req, res, next) => {
-    try {
-        const user = users.find(user => user.id === req.params.userId);
-        if (!user) {
-            res.status(404).json({ error: 'User not found' });
-        } else {
-            res.status(200).json(user);
-        }
-    } catch (err) {
-        next(err);
-    }
-});
+router.post('/', (req, res, next) =>
+  handleCRUDOperations(req, res, next, User)
+);
 
-// delete user with provided userId
-router.delete('/:userId', (req, res, next) => {
-    try {
-        const newData = users.filter(user => user.id !== req.params.userId);
-        res.status(200).json(newData);
-    } catch (err) {
-        next(err);
-    }
-});
+router.get('/:userId', (req, res, next) =>
+  handleCRUDOperations(req, res, next, User, req.params.userId)
+);
 
-router.use(errorHandler);
+router.put('/:userId', (req, res, next) =>
+  handleCRUDOperations(req, res, next, User, req.params.userId)
+);
 
-// handle 404 errors
-router.all("*", (req, res) => {
-    res.status(404).json({
-        "error": "API endpoint not found",
-        "message": "The requested API endpoint could not be found on this server. Please check that you have entered the correct URL.",
-        "status": 404
-    });
-})
-
+router.delete('/:userId', (req, res, next) =>
+  handleCRUDOperations(req, res, next, User, req.params.userId)
+);
 
 module.exports = router;
