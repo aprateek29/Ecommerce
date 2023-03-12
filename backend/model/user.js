@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const User = mongoose.Schema({
+const userSchema = new mongoose.Schema({
   username: String,
   email: String,
   password: String,
@@ -15,6 +15,8 @@ const User = mongoose.Schema({
   ordersId: String,
   wishlistId: String
 });
+
+const User = mongoose.model('User', userSchema);
 
 // const User = {
 //     id, // unique identifier for the user
